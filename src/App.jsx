@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Card from "./components/Card";
+import "./styles/App.css";
+import styles from "./styles/App.module.css";
+import MsgError from "./components/MsgError";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState({
+    name: "",
+    lenguaje: "",
+  });
+  const [showCard, setShowCard] = useState(false);
+  const [errors, setErrors] = useState(false);
 
+  const handlerSubmit = (event) => {
+    event.preventDefault();
+    if (user.name.length >= 3 && user.lenguaje.length > 5) {
+      setShowCard(true);
+      setErrors(false);
+    } else {
+      setErrors(true);
+    }
+  };
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <h1>Color favorito?</h1>
+      {showCard ? (
+        <Card nombre={user.name} lenguaje={user.lenguaje} />
+      ) : (
+        <form onSubmit={handlerSubmit}>
+          <label> Nombre: </label>
+          <input
+            type="text"
+            onChange={(event) =>
+              setUser({ ...user, name: event.target.value.trim() })
+            }
+          />
+          <label> Color Favorito: </label>
+          <input
+            type="text"
+            onChange={(event) =>
+              setUser({ ...user, lenguaje: event.target.value.trim() })
+            }
+          />
+          <button>Enviar respuestas</button>
+          {errors ? <MsgError /> : null}
+        </form>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
